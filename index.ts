@@ -47,15 +47,18 @@ function ifdefPlugin(settings: IPluginSettings = {}): Plugin {
   const fileRegExp = settings.filePath ?? /\.[jt]sx?/;
   const variables = Object.freeze(settings.variables ?? { ...process.env });
 
-  function getToken(line): [string, string, number, number] {
+  function getToken(
+    line: string,
+  ): [string, string, number, number] | undefined {
     const match = line.match(regExp);
-    if (match)
+    if (match) {
       return [
-        match.groups.token,
-        match.groups.expression ?? "",
-        match.index,
-        match[0].length,
+        match.groups?.token ?? "",
+        match.groups?.expression ?? "",
+        match.index ?? -1,
+        match[0].length ?? -1,
       ];
+    }
   }
 
   function evalExpression(
@@ -82,10 +85,10 @@ function ifdefPlugin(settings: IPluginSettings = {}): Plugin {
         );
       return res;
     } catch (e) {
-      if (typeof e === "object") e.line = line;
+      if (typeof e === "object") (e as Record<string, number>).line = line;
       else {
         e = new Error("Error executing expression: " + e);
-        e.line = line;
+        (e as Record<string, number>).line = line;
       }
       throw e;
     }
@@ -101,7 +104,7 @@ function ifdefPlugin(settings: IPluginSettings = {}): Plugin {
     let remove = [];
     let prune = false;
     let done = false;
-    let i;
+    let i: number;
 
     try {
       for (i = start; i < lines.length; i++) {
@@ -109,8 +112,10 @@ function ifdefPlugin(settings: IPluginSettings = {}): Plugin {
         const tokenData = getToken(line);
         if (prune || ignore) remove.push(i);
         if (!tokenData) {
-          if (!prune && !ignore && settings.verbose)
+          if (!prune && !ignore && settings.verbose) {
             console.log("Including " + file + ":" + (i + 1));
+          }
+
           continue;
         }
         remove.push(i);
@@ -168,17 +173,18 @@ function ifdefPlugin(settings: IPluginSettings = {}): Plugin {
       }
       throw new Error("Unterminated #if found on line " + start);
     } catch (err) {
-      const line = err.line ?? start;
+      const error = err as any;
+      const line = error.line ?? start;
       const tokenData = getToken(lines[line]);
-      err.location = {
+      error.location = {
         line: line + 1,
         lineText: lines[line],
       };
       if (tokenData) {
-        err.location.column = tokenData[2];
-        err.location.length = tokenData[3];
+        error.location.column = tokenData[2];
+        error.location.length = tokenData[3];
       }
-      throw err;
+      throw error;
     }
   }
 
@@ -188,7 +194,7 @@ function ifdefPlugin(settings: IPluginSettings = {}): Plugin {
     warn: (msg: Partial<Message>) => void,
   ) {
     let i;
-    let remove = [];
+    let remove: number[] = [];
     const lines = data.split("\n");
 
     for (i = 0; i < lines.length; i++) {
@@ -234,16 +240,17 @@ function ifdefPlugin(settings: IPluginSettings = {}): Plugin {
             loader: (loaders.includes(ext) ? ext : "js") as Loader,
           };
         } catch (e) {
-          if (!e.location) throw e;
+          const error = e as any;
+          if (!error.location) throw error;
           return {
             warnings,
             errors: [
               {
-                text: e.message,
-                detail: e,
+                text: error.message,
+                detail: error,
                 location: {
                   file: args.path,
-                  ...e.location,
+                  ...error.location,
                 },
               },
             ],

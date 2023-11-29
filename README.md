@@ -16,12 +16,12 @@ Example:
 
 ```js
 /// #if NODE_ENV === "production"
-console.log("production specific code");
+console.log('production specific code');
 /// #elif NODE_ENV === "debug"
-console.log("debug specific code");
+console.log('debug specific code');
 /// #else
 /// #warning Unknown NODE_ENV
-console.log("something else");
+console.log('something else');
 /// #endif
 ```
 
@@ -41,14 +41,14 @@ If blocks can be nested.
 
 ```js
 esbuild.build({
-  entryPoints: ["./index.js"],
+  entryPoints: ['./index.js'],
   bundle: true,
-  target: "es6",
-  outfile: "./out.js",
+  target: 'es6',
+  outfile: './out.js',
   plugins: [
     ifdefPlugin({
       variables: {
-        VARIABLE_NAME: "variable value",
+        VARIABLE_NAME: 'variable value',
       },
       // ... plugin config
     }),
