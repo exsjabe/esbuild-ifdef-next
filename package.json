@@ -5,7 +5,7 @@
   "module": "dist/index.mjs",
   "types": "",
   "scripts": {
-    "build": "tsup index.ts --dts --format cjs,esm --minify"
+    "build": "tsup index.ts --dts --format cjs,esm"
   },
   "exports": {
     ".": {
@@ -21,7 +21,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/zziger/esbuild-ifdef.git"
+    "url": "https://github.com/exsjabe/esbuild-ifdef-next.git"
   },
   "peerDependencies": {
     "esbuild": "^0.15.2"

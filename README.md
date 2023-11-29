@@ -1,15 +1,13 @@
-# esbuild-ifdef
+# esbuild-ifdef-next
 
+This is fork of the [esbuild-ifdef](https://github.com/zziger/esbuild-ifdef) plugin with the latest version of esbuild.
 This esbuild plugin allows you to include/exclude code from your bundle conditionally on compile time using `/// #if` comments.
 
 ## Installation
 
 ```bash
 # npm
-npm install esbuild-ifdef
-
-#yarn
-yarn add esbuild-ifdef
+npm install esbuild-ifdef-next
 ```
 
 ## Usage
