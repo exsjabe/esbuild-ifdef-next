@@ -1,6 +1,6 @@
 {
-  "name": "esbuild-ifdef",
-  "version": "0.2.0",
+  "name": "esbuild-ifdef-next",
+  "version": "0.3.0",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "",
