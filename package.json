@@ -6,7 +6,8 @@
   "types": "",
   "scripts": {
     "build": "tsup index.ts --dts --format cjs,esm",
-    "format": "prettier --write . --cache --log-level warn"
+    "format": "prettier --write . --cache --log-level warn",
+    "check": "tsc --noEmit"
   },
   "exports": {
     ".": {
@@ -24,13 +25,13 @@
     "type": "git",
     "url": "https://github.com/exsjabe/esbuild-ifdef-next.git"
   },
-  "peerDependencies": {
-    "esbuild": "^0.15.2"
-  },
   "devDependencies": {
     "@types/node": "^20.10.0",
     "prettier": "^3.1.0",
     "tsup": "^8.0.1",
     "typescript": "^5.3.2"
+  },
+  "dependencies": {
+    "esbuild": "^0.19.8"
   }
 }
